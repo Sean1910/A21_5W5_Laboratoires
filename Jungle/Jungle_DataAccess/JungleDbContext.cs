@@ -14,12 +14,12 @@ namespace Jungle_DataAccess
     {
     
     }
-    
-      public DbSet<Guide> Guide { get; set; }
-      public DbSet<Travel> Travel { get; set; }
-      public DbSet<TravelRecommendation> TravelRecommendation { get; set; }
-      public DbSet<Destination> Destination { get; set; }
-      public DbSet<Country> Country { get; set; }
-  
+
+    public DbSet<Guide> Guide { get; set; }
+    public DbSet<Travel> Travel { get; set; }
+    public DbSet<TravelRecommendation> TravelRecommendation { get; set; }
+    public DbSet<Destination> Destination { get; set; }
+    public DbSet<Country> Country { get; set; }
+
   }
 }
