@@ -1,6 +1,6 @@
 using System;
 
-namespace Jungle.Models
+namespace Jungle_Models.ViewModels
 {
   public class ErrorViewModel
   {
