@@ -1,0 +1,55 @@
+﻿@model Jungle_Models.Country
+
+<div class="container p-3">
+  <div class="row pt-4">
+    <div class="col-10">
+      <h2 class="text-primary">Country</h2>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-4">
+      <label asp-for="Name"></label>
+    </div>
+    <div class="col-8">
+      <input asp-for="Name" class="form-control" />
+      <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+  </div>
+
+  <br /><br />
+
+    <table class="table table-bordered table-striped" style="width:100%">
+      <thead class="bg-dark text-white">
+        <tr>
+          <th>
+            Destination
+          </th>
+          <th>
+            Region
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var item in Model.Destination)
+        {
+
+        <tr>
+          <td width="15%">@item.Name</td>
+          <td width="15%">@item.Region</td>
+          <td width="30%" class="text-center">
+            <div class="w-75 btn-group" role="group">
+              <a asp-controller="Destination" asp-action="upsert" asp-route-Id="@item.Id" class="btn btn-warning mx-2">
+                <i class="fas fa-edit"></i> &nbsp; Edit
+              </a>
+              <a asp-controller="Destination" asp-action="" asp-route-Id="@item.Id" class="btn btn-danger mx-2">
+                <i class="fas fa-trash-alt"></i> &nbsp; Delete
+              </a>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+</div>
