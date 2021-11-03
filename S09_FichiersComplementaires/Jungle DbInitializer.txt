@@ -1,0 +1,28 @@
+ try
+            {
+                if (_db.Database.GetPendingMigrations().Count() > 0)
+                {
+                    _db.Database.Migrate();
+                }
+            }
+            catch(Exception ex)
+            {
+                
+            }
+
+            if (_db.Roles.Any(r => r.Name == AppConst.AdminRole)) return;
+
+            _roleManager.CreateAsync(new IdentityRole(AppConst.AdminRole)).GetAwaiter().GetResult();
+            // Autres roles
+
+            _userManager.CreateAsync(new ApplicationUser
+            {
+                UserName = "9999999@cegepmontpetit.ca",
+                Email = "9999999@cegepmontpetit.ca",
+                EmailConfirmed = true,
+                NickName= "AdminJungle",
+                PhoneNumber = "111111111111"
+            }, "Jungle1234*").GetAwaiter().GetResult();
+
+            ApplicationUser user = _db.ApplicationUser.FirstOrDefault(u => u.Email == "9999999@cegepmontpetit.ca");
+            _userManager.AddToRoleAsync(user, AppConst.AdminRole).GetAwaiter().GetResult();
