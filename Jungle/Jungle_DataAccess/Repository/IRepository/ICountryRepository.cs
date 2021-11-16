@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Jungle_DataAccess.Repository.IRepository
 {
-  public interface ICountryRepository : IRepository<Country>
+  public interface ICountryRepository : IRepositoryAsync<Country>
   {
     void Update(Country country);
   }

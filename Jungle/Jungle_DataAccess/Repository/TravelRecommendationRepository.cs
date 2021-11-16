@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Jungle_DataAccess.Repository
 {
-  public class TravelRecommendationRepository : Repository<TravelRecommendation>, ITravelRecommendationRepository
+  public class TravelRecommendationRepository : RepositoryAsync<TravelRecommendation>, ITravelRecommendationRepository
   {
     private readonly JungleDbContext _db;
 

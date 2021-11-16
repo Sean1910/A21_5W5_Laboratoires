@@ -18,14 +18,14 @@ namespace Jungle.Areas.Admin.Controllers
       _unitOfWork = unitOfWork;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-      IEnumerable<Country> CountryList = _unitOfWork.Country.GetAll();
+      IEnumerable<Country> CountryList = await _unitOfWork.Country.GetAllAsync();
       
       return View(CountryList);
     }
 
-    public IActionResult Upsert(int? id)
+    public async Task<IActionResult> Upsert(int? id)
     {
       Country country = new Country();
       if (id == null)
@@ -34,7 +34,7 @@ namespace Jungle.Areas.Admin.Controllers
         return View(country);
       }
       // Update
-      country = _unitOfWork.Country.Get(id.GetValueOrDefault());
+      country = await _unitOfWork.Country.GetAsync(id.GetValueOrDefault());
       if (country == null)
       {
         return NotFound();
@@ -44,13 +44,13 @@ namespace Jungle.Areas.Admin.Controllers
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public  IActionResult Upsert(Country country)
+    public async Task<IActionResult> Upsert(Country country)
     {
       if (ModelState.IsValid)
       {
         if (country.Id == 0)
         {
-         _unitOfWork.Country.Add(country);
+        await _unitOfWork.Country.AddAsync(country);
 
         }
         else
@@ -63,13 +63,13 @@ namespace Jungle.Areas.Admin.Controllers
       return View(country);
     }
 
-    public IActionResult Delete(int? id)
+    public async Task<IActionResult> Delete(int? id)
     {
       if (id == null || id == 0)
       {
         return NotFound();
       }
-      var country = _unitOfWork.Country.Get(id.GetValueOrDefault());
+      var country = await _unitOfWork.Country.GetAsync(id.GetValueOrDefault());
       if (country == null)
       {
         return NotFound();
@@ -81,15 +81,15 @@ namespace Jungle.Areas.Admin.Controllers
     //POST - DELETE
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult DeletePost(int? id)
+    public async Task<IActionResult> DeletePost(int? id)
     {
-      var country = _unitOfWork.Country.Get(id.GetValueOrDefault());
+      var country = await _unitOfWork.Country.GetAsync(id.GetValueOrDefault());
       if (country == null)
       {
         return NotFound();
       }
       TempData["Success"] = "Delete completed successfully";
-      _unitOfWork.Country.Remove(country);
+      await _unitOfWork.Country.RemoveAsync(country);
       _unitOfWork.Save();
       return RedirectToAction("Index");
     }

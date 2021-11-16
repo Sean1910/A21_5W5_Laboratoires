@@ -20,16 +20,16 @@ namespace Jungle.Areas.Admin.Controllers
       _unitOfWork = unitOfWork;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-      IEnumerable<Destination> DestinationList = _unitOfWork.Destination.GetAll(includeProperties:"Country");
+      IEnumerable<Destination> DestinationList = await _unitOfWork.Destination.GetAllAsync(includeProperties:"Country");
       
       return View(DestinationList);
     }
 
-    public IActionResult Upsert(int? id)
+    public async Task<IActionResult> Upsert(int? id)
     {
-      IEnumerable<Country> CouList =  _unitOfWork.Country.GetAll();
+      IEnumerable<Country> CouList = await _unitOfWork.Country.GetAllAsync();
       DestinationVM destinationVM = new DestinationVM()
       {
         Destination = new Destination(),
@@ -45,7 +45,7 @@ namespace Jungle.Areas.Admin.Controllers
         return View(destinationVM);
       }
       //this is for edit
-      destinationVM.Destination = _unitOfWork.Destination.Get(id.GetValueOrDefault());
+      destinationVM.Destination = await _unitOfWork.Destination.GetAsync(id.GetValueOrDefault());
       if (destinationVM.Destination == null)
       {
         return NotFound();
@@ -55,13 +55,13 @@ namespace Jungle.Areas.Admin.Controllers
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Upsert(DestinationVM destinationVM)
+    public async Task<IActionResult> Upsert(DestinationVM destinationVM)
     {
       if (ModelState.IsValid)
       {
         if (destinationVM.Destination.Id == 0)
         {
-          _unitOfWork.Destination.Add(destinationVM.Destination);
+          await _unitOfWork.Destination.AddAsync(destinationVM.Destination);
           TempData["Success"] = "The destination added successfully";
         }
         else
@@ -75,7 +75,7 @@ namespace Jungle.Areas.Admin.Controllers
       else
       {
         TempData["Error"] = "Error while creating destination";
-        IEnumerable<Country> CouList = _unitOfWork.Country.GetAll();
+        IEnumerable<Country> CouList = await _unitOfWork.Country.GetAllAsync();
         destinationVM.CountryList = CouList.Select(i => new SelectListItem
         {
           Text = i.Name,
@@ -85,21 +85,21 @@ namespace Jungle.Areas.Admin.Controllers
         if (destinationVM.Destination.Id != 0)
         {
           TempData["Error"] = "Error while updating destination";
-          destinationVM.Destination = _unitOfWork.Destination.Get(destinationVM.Destination.Id);
+          destinationVM.Destination = await _unitOfWork.Destination.GetAsync(destinationVM.Destination.Id);
         }
       }
       return View(destinationVM);
     }
 
 
-   
-    public IActionResult Delete(int? id)
+
+    public async Task<IActionResult> Delete(int? id)
     {
       if (id == null || id == 0)
       {
         return NotFound();
       }
-      var dest = _unitOfWork.Destination.Get(id.GetValueOrDefault());
+      var dest = await _unitOfWork.Destination.GetAsync(id.GetValueOrDefault());
       if (dest == null)
       {
         return NotFound();
@@ -111,15 +111,15 @@ namespace Jungle.Areas.Admin.Controllers
     //POST - DELETE
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult DeletePost(int? id)
+    public async Task<IActionResult> DeletePost(int? id)
     {
-      var dest = _unitOfWork.Destination.Get(id.GetValueOrDefault());
+      var dest = await _unitOfWork.Destination.GetAsync(id.GetValueOrDefault());
       if (dest == null)
       {
         return NotFound();
       }
       TempData["Success"] = "Delete completed successfully";
-      _unitOfWork.Destination.Remove(dest);
+      await _unitOfWork.Destination.RemoveAsync(dest);
       _unitOfWork.Save();
       return RedirectToAction("Index");
     }

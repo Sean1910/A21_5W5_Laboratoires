@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Jungle_DataAccess.Repository
 {
-  public class CountryRepository : Repository<Country>, ICountryRepository
+  public class CountryRepository : RepositoryAsync<Country>, ICountryRepository
   {
     private readonly JungleDbContext _db;
 

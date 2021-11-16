@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Jungle_DataAccess.Repository.IRepository
 {
-  public interface ITravelRecommendationRepository : IRepository<TravelRecommendation>
+  public interface ITravelRecommendationRepository : IRepositoryAsync<TravelRecommendation>
   {
     void Update(TravelRecommendation travelRecommendation);
   }

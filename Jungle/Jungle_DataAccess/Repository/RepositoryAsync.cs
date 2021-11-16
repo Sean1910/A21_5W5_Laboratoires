@@ -9,29 +9,29 @@ using System.Threading.Tasks;
 
 namespace Jungle_DataAccess.Repository
 {
-  public class Repository<T> : IRepository<T> where T : class
+  public class RepositoryAsync<T> : IRepositoryAsync<T> where T : class
   {
 
     private readonly JungleDbContext _db;
     internal DbSet<T> dbSet;
 
-    public Repository(JungleDbContext db)
+    public RepositoryAsync(JungleDbContext db)
     {
       _db = db;
       this.dbSet = _db.Set<T>();
     }
 
-    public void Add(T entity)
+    public async Task AddAsync(T entity)
     {
-      dbSet.Add(entity);
+      await dbSet.AddAsync(entity);
     }
 
-    public T Get(int id)
+    public async Task<T> GetAsync(int id)
     {
-      return dbSet.Find(id);
+      return await dbSet.FindAsync(id);
     }
 
-    public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null, bool isTracking = true)
+    public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null)
     {
       IQueryable<T> query = dbSet;
 
@@ -50,12 +50,12 @@ namespace Jungle_DataAccess.Repository
 
       if (orderBy != null)
       {
-        return orderBy(query).ToList();
+        return await orderBy(query).ToListAsync();
       }
-      return query.ToList();
+      return await query.ToListAsync();
     }
 
-    public T FirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null, bool isTracking = true)
+    public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null, string includeProperties = null)
     {
       IQueryable<T> query = dbSet;
 
@@ -73,21 +73,25 @@ namespace Jungle_DataAccess.Repository
       }
 
 
-      return query.FirstOrDefault();
+      return await query.FirstOrDefaultAsync();
     }
 
-    public void Remove(int id)
+    public async Task RemoveAsync(int id)
     {
-      T entity = dbSet.Find(id);
-      Remove(entity);
+      T entity = await dbSet.FindAsync(id);
+      await RemoveAsync(entity);
     }
 
-    public void Remove(T entity)
+    // pas de Async pour Remove
+    // structure utilisé pour garder standard et distinguer le Repo du Repo Async
+    public async Task RemoveAsync(T entity)
     {
       dbSet.Remove(entity);
     }
 
-    public void RemoveRange(IEnumerable<T> entity)
+    // pas de Async pour RemoveRange
+    // structure utilisé pour garder standard et distinguer le Repo du Repo Async
+    public async Task RemoveRangeAsync(IEnumerable<T> entity)
     {
       dbSet.RemoveRange(entity);
     }
